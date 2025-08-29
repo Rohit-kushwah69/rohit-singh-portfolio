@@ -166,15 +166,15 @@ const Home = () => {
             x: socialData.x || "", // ✅ added X
           });
           // Debugging (dekho backend kya bhej raha hai)
-          console.log("Hero:", heroRes.data);
-          console.log("Skills:", skillsRes.data);
-          console.log("Projects:", projectsRes.data);
-          console.log("Services:", servicesRes.data);
-          console.log("Experiences:", expRes.data);
-          console.log("Testimonials:", testimonialsRes.data);
-          console.log("Socials:", socRes.data);
-          console.log("Contact:", contactInfoRes.data);
-          console.log("About:", aboutRes.data);
+          // console.log("Hero:", heroRes.data);
+          // console.log("Skills:", skillsRes.data);
+          // console.log("Projects:", projectsRes.data);
+          // console.log("Services:", servicesRes.data);
+          // console.log("Experiences:", expRes.data);
+          // console.log("Testimonials:", testimonialsRes.data);
+          // console.log("Socials:", socRes.data);
+          // console.log("Contact:", contactInfoRes.data);
+          // console.log("About:", aboutRes.data);
         }
       } catch (err) {
         console.error("Error fetching home data:", err.message);
