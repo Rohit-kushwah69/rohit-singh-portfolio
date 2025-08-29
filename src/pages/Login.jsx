@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await API.post("/api/login", formData);
+      API.post("/api/login", formData);
       const userData = {
         name: res.data.name,
         email: res.data.email,
