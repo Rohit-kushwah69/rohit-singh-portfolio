@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL:"https://rohit-portfolio-server.onrender.com",
+  baseURL: import.meta.env.VITE_API_URL || "https://rohit-portfolio-server.onrender.com",
   withCredentials: true, // IMPORTANT for httpOnly cookie
 });
 
