@@ -11,15 +11,16 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // ✅ Correct endpoint (profile check)
-        const res = await API.get("/");
+        // ✅ Now backend always returns { success: true, user }
+        const res = await API.get("/profile", { withCredentials: true });
 
         if (res.data.success) {
-          setUser(res.data.user); // { id, name, role }
+          setUser(res.data.user);
         } else {
           setUser(null);
         }
       } catch (err) {
+        console.error("Profile fetch error:", err.message);
         setUser(null);
       } finally {
         setLoading(false);

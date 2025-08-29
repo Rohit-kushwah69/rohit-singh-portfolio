@@ -144,32 +144,38 @@ const Home = () => {
           API.get("/aboutDisplay"),
         ]);
 
-        setHero(heroRes.data.hero || heroRes.data || null);
-        setSkills(skillsRes.data.skills || skillsRes.data || []);
-        setProjects(projectsRes.data.projects || projectsRes.data || []);
-        setServices(servicesRes.data.services || servicesRes.data || []);
-        setExperiences(expRes.data.experiences || expRes.data || []);
-        setTestimonials(testimonialsRes.data.testimonials || testimonialsRes.data || []);
-        setContacts(contactInfoRes.data.data?.[0] || contactInfoRes.data || null);
-        setAboutCards(aboutRes.data.aboutCards || aboutRes.data || []);
+        if (heroRes.data.success) setHero(heroRes.data.hero || null);
+        if (skillsRes.data.success) setSkills(skillsRes.data.skills || []);
+        if (projectsRes.data.success) setProjects(projectsRes.data.projects || []);
+        if (servicesRes.data.success) setServices(servicesRes.data.services || []);
+        if (expRes.data.success) setExperiences(expRes.data.experiences || []);
+        if (testimonialsRes.data.success) setTestimonials(testimonialsRes.data.testimonials || []);
+        if (contactInfoRes.data.success) {
+          setContacts(contactInfoRes.data.data[0] || null); // ek hi record store karo
+        }
+        if (aboutRes.data.success) setAboutCards(aboutRes.data.aboutCards || []);
 
-        setSocials({
-          github: socRes.data.github || "",
-          linkedin: socRes.data.linkedin || "",
-          instagram: socRes.data.instagram || "",
-          whatsapp: socRes.data.whatsapp || "",
-          x: socRes.data.x || "",
-        });
-
-        console.log("Hero:", heroRes.data);
-        console.log("Skills:", skillsRes.data);
-        console.log("Projects:", projectsRes.data);
-        console.log("Services:", servicesRes.data);
-        console.log("Experiences:", expRes.data);
-        console.log("Testimonials:", testimonialsRes.data);
-        console.log("Socials:", socRes.data);
-        console.log("Contact:", contactInfoRes.data);
-        console.log("About:", aboutRes.data);
+        // ✅ Set socials object, now including X
+        if (socRes.data.success) {
+          const socialData = socRes.data.socials || {};
+          setSocials({
+            github: socialData.github || "",
+            linkedin: socialData.linkedin || "",
+            instagram: socialData.instagram || "",
+            whatsapp: socialData.whatsapp || "",
+            x: socialData.x || "", // ✅ added X
+          });
+          // Debugging (dekho backend kya bhej raha hai)
+          console.log("Hero:", heroRes.data);
+          console.log("Skills:", skillsRes.data);
+          console.log("Projects:", projectsRes.data);
+          console.log("Services:", servicesRes.data);
+          console.log("Experiences:", expRes.data);
+          console.log("Testimonials:", testimonialsRes.data);
+          console.log("Socials:", socRes.data);
+          console.log("Contact:", contactInfoRes.data);
+          console.log("About:", aboutRes.data);
+        }
       } catch (err) {
         console.error("Error fetching home data:", err.message);
       } finally {
@@ -179,7 +185,6 @@ const Home = () => {
 
     fetchData();
   }, []);
-
 
   ////////////////// Contact  /////////////////////////////
 
