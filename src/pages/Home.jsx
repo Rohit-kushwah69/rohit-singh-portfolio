@@ -165,6 +165,16 @@ const Home = () => {
             whatsapp: socialData.whatsapp || "",
             x: socialData.x || "", // ✅ added X
           });
+          // Debugging (dekho backend kya bhej raha hai)
+          console.log("Hero:", heroRes.data);
+          console.log("Skills:", skillsRes.data);
+          console.log("Projects:", projectsRes.data);
+          console.log("Services:", servicesRes.data);
+          console.log("Experiences:", expRes.data);
+          console.log("Testimonials:", testimonialsRes.data);
+          console.log("Socials:", socRes.data);
+          console.log("Contact:", contactInfoRes.data);
+          console.log("About:", aboutRes.data);
         }
       } catch (err) {
         console.error("Error fetching home data:", err.message);
@@ -651,25 +661,25 @@ const Home = () => {
               />
 
               <select
-  name="rating"
-  value={formData.rating}
-  onChange={handleChange}
-  className="bg-white border rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-600"
-  required
->
-  <option value="">Select Rating</option>
-  {[
-    { value: 1, label: "1 – Poor" },
-    { value: 2, label: "2 – Fair" },
-    { value: 3, label: "3 – Good" },
-    { value: 4, label: "4 – Very Good" },
-    { value: 5, label: "5 – Excellent" },
-  ].map((option) => (
-    <option key={option.value} value={option.value}>
-      {option.label}
-    </option>
-  ))}
-</select>
+                name="rating"
+                value={formData.rating}
+                onChange={handleChange}
+                className="bg-white border rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-600"
+                required
+              >
+                <option value="">Select Rating</option>
+                {[
+                  { value: 1, label: "1 – Poor" },
+                  { value: 2, label: "2 – Fair" },
+                  { value: 3, label: "3 – Good" },
+                  { value: 4, label: "4 – Very Good" },
+                  { value: 5, label: "5 – Excellent" },
+                ].map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
 
 
               <button
