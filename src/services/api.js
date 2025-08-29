@@ -5,4 +5,4 @@ const API = axios.create({
   withCredentials: true, // IMPORTANT for httpOnly cookie
 });
 
-export default API;
+export default API;  
