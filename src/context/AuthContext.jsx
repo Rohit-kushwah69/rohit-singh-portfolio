@@ -1,32 +1,26 @@
 import { createContext, useEffect, useState } from "react";
 import API from "../services/api";
 
-// Context create
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Check user on mount
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // ✅ Now backend always returns { success: true, user }
-        const res = await API.get("/profile", { withCredentials: true });
-
+        const res = await API.get("/"); // backend se user data
         if (res.data.success) {
-          setUser(res.data.user);
-        } else {
-          setUser(null);
+          setUser(res.data.user); // { id, name, role }
         }
-      } catch (err) {
-        console.error("Profile fetch error:", err.message);
+      } catch {
         setUser(null);
       } finally {
         setLoading(false);
       }
     };
-
     fetchUser();
   }, []);
 
