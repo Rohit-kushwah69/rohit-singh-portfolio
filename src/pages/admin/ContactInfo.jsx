@@ -3,17 +3,12 @@ import API from "../../services/api";
 import { toast } from "react-toastify";
 
 const ContactInfo = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    phone: "",
-    location: "",
-  });
+  const [formData, setFormData] = useState({ email: "", phone: "", location: "" });
   const [resume, setResume] = useState(null);
   const [contactList, setContactList] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Fetch all contact info
   const fetchInfo = async () => {
     try {
       setLoading(true);
@@ -26,29 +21,17 @@ const ContactInfo = () => {
     }
   };
 
-  useEffect(() => {
-    fetchInfo();
-  }, []);
+  useEffect(() => { fetchInfo(); }, []);
 
-  // Handle input change
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleFileChange = (e) => setResume(e.target.files[0]);
 
-  // Handle file change
-  const handleFileChange = (e) => {
-    setResume(e.target.files[0]);
-  };
-
-  // Submit (Add or Update)
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.email || !formData.phone || !formData.location) {
       toast.error("Please fill all required fields");
       return;
     }
-
     const data = new FormData();
     data.append("email", formData.email);
     data.append("phone", formData.phone);
@@ -57,45 +40,34 @@ const ContactInfo = () => {
 
     try {
       if (editingId) {
-        await API.put(`/contactInfoUpdate/${editingId}`, data, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await API.put(`/contactInfoUpdate/${editingId}`, data);
         toast.success("Contact info updated");
       } else {
-        await API.post("/contactInfoCreate", data, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await API.post("/contactInfoCreate", data);
         toast.success("Contact info added");
       }
-
       setFormData({ email: "", phone: "", location: "" });
       setResume(null);
       setEditingId(null);
       fetchInfo();
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to save info");
     }
   };
 
-  // Edit
   const handleEdit = (item) => {
-    setFormData({
-      email: item.email,
-      phone: item.phone,
-      location: item.location,
-    });
+    setFormData({ email: item.email, phone: item.phone, location: item.location });
     setEditingId(item._id);
   };
- 
-  
-  // Delete
+
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this record?")) return;
+    if (!window.confirm("Are you sure?")) return;
     try {
       await API.delete(`/contactInfoDelete/${id}`);
       toast.success("Deleted successfully");
       fetchInfo();
-    } catch (error) {
+    } catch (err) {
       toast.error("Failed to delete");
     }
   };
@@ -138,11 +110,13 @@ const ContactInfo = () => {
           onChange={handleChange}
           required
         />
+
         <input
           type="file"
           name="resume"
           className="border p-2 w-full rounded"
           onChange={handleFileChange}
+          accept=".pdf,.doc,.docx"
         />
 
         <button
@@ -153,8 +127,8 @@ const ContactInfo = () => {
         </button>
       </form>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      {/* Desktop Table View */}
+      <div className="overflow-x-auto hidden md:block">
         <table className="w-full border-collapse border text-left">
           <thead>
             <tr className="bg-gray-100">
@@ -168,15 +142,11 @@ const ContactInfo = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="5" className="text-center p-4">
-                  Loading...
-                </td>
+                <td colSpan="5" className="text-center p-4">Loading...</td>
               </tr>
             ) : contactList.length === 0 ? (
               <tr>
-                <td colSpan="5" className="text-center p-4">
-                  No records found
-                </td>
+                <td colSpan="5" className="text-center p-4">No records found</td>
               </tr>
             ) : (
               contactList.map((item) => (
@@ -185,7 +155,7 @@ const ContactInfo = () => {
                   <td className="border p-2">{item.phone}</td>
                   <td className="border p-2">{item.location}</td>
                   <td className="border p-2">
-                    {item.resume && (
+                    {item.resume ? (
                       <a
                         href={item.resume}
                         target="_blank"
@@ -194,18 +164,18 @@ const ContactInfo = () => {
                       >
                         Download
                       </a>
-                    )}
+                    ) : "-"}
                   </td>
                   <td className="border p-2 space-x-2">
                     <button
                       onClick={() => handleEdit(item)}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition"
+                      className="bg-yellow-500 text-white px-3 py-1 rounded"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(item._id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+                      className="bg-red-500 text-white px-3 py-1 rounded"
                     >
                       Delete
                     </button>
@@ -215,6 +185,47 @@ const ContactInfo = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="space-y-4 md:hidden">
+        {loading ? (
+          <p className="text-center">Loading...</p>
+        ) : contactList.length === 0 ? (
+          <p className="text-center">No records found</p>
+        ) : (
+          contactList.map((item) => (
+            <div key={item._id} className="border rounded p-4 shadow bg-white">
+              <p><span className="font-semibold">Email:</span> {item.email}</p>
+              <p><span className="font-semibold">Phone:</span> {item.phone}</p>
+              <p><span className="font-semibold">Location:</span> {item.location}</p>
+              {item.resume && (
+                <a
+                  href={item.resume}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-blue-600 underline block mt-2"
+                >
+                  Download Resume
+                </a>
+              )}
+              <div className="mt-3 flex gap-2">
+                <button
+                  onClick={() => handleEdit(item)}
+                  className="bg-yellow-500 text-white px-3 py-1 rounded"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
