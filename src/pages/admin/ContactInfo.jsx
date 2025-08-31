@@ -15,16 +15,14 @@ const ContactInfo = () => {
       setLoading(true);
       const res = await API.get("/contactInfoDisplay");
       setContactList(res.data.data || []);
-    } catch (err) {
+    } catch {
       toast.error("Failed to fetch contact info");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchInfo();
-  }, []);
+  useEffect(() => { fetchInfo(); }, []);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
   const handleFileChange = (e) => setResume(e.target.files[0]);
@@ -54,7 +52,7 @@ const ContactInfo = () => {
       setResume(null);
       setEditingId(null);
       fetchInfo();
-    } catch (err) {
+    } catch {
       toast.error("Failed to save contact info");
     }
   };
@@ -65,12 +63,12 @@ const ContactInfo = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this record?")) return;
+    if (!window.confirm("Are you sure?")) return;
     try {
       await API.delete(`/contactInfoDelete/${id}`);
       toast.success("Deleted successfully");
       fetchInfo();
-    } catch (err) {
+    } catch {
       toast.error("Failed to delete");
     }
   };
@@ -100,24 +98,21 @@ const ContactInfo = () => {
             </tr>
           </thead>
           <tbody>
-            {loading ? (
-              <tr><td colSpan="5" className="text-center p-4">Loading...</td></tr>
-            ) : contactList.length === 0 ? (
-              <tr><td colSpan="5" className="text-center p-4">No records found</td></tr>
-            ) : (
-              contactList.map((item) => (
-                <tr key={item._id} className="hover:bg-gray-50">
-                  <td className="border p-2">{item.email}</td>
-                  <td className="border p-2">{item.phone}</td>
-                  <td className="border p-2">{item.location}</td>
-                  <td className="border p-2">{item.resume ? <a href={item.resume} target="_blank" rel="noreferrer" className="text-blue-600 underline">Download</a> : "-"}</td>
-                  <td className="border p-2 space-x-2">
-                    <button onClick={() => handleEdit(item)} className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition">Edit</button>
-                    <button onClick={() => handleDelete(item._id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">Delete</button>
-                  </td>
-                </tr>
-              ))
-            )}
+            {loading ? <tr><td colSpan="5" className="text-center p-4">Loading...</td></tr> :
+              contactList.length === 0 ? <tr><td colSpan="5" className="text-center p-4">No records found</td></tr> :
+                contactList.map(item => (
+                  <tr key={item._id} className="hover:bg-gray-50">
+                    <td className="border p-2">{item.email}</td>
+                    <td className="border p-2">{item.phone}</td>
+                    <td className="border p-2">{item.location}</td>
+                    <td className="border p-2">{item.resume ? <a href={item.resume} target="_blank" rel="noreferrer" className="text-blue-600 underline">Download</a> : "-"}</td>
+                    <td className="border p-2 space-x-2">
+                      <button onClick={() => handleEdit(item)} className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition">Edit</button>
+                      <button onClick={() => handleDelete(item._id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">Delete</button>
+                    </td>
+                  </tr>
+                ))
+            }
           </tbody>
         </table>
       </div>
