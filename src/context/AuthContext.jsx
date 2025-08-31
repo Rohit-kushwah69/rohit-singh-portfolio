@@ -11,10 +11,11 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await API.get("/"); // backend se user data
-        if (res.data.success) {
-          setUser(res.data.user); // { id, name, role }
-        }
+        const token = localStorage.getItem("token"); // mobile-friendly
+        const res = await API.get("/", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.data.success) setUser(res.data.user);
       } catch {
         setUser(null);
       } finally {
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }) => {
     };
     fetchUser();
   }, []);
+
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading }}>
