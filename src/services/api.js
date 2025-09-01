@@ -5,10 +5,4 @@ const API = axios.create({
   withCredentials: true, // IMPORTANT for httpOnly cookie
 });
 
-// Optional: attach token from localStorage for mobile / cross-domain
-const token = localStorage.getItem("token");
-if (token) {
-  API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-}
-
 export default API;  
