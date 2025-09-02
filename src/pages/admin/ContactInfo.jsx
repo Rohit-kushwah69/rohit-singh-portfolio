@@ -13,7 +13,7 @@ const ContactInfo = () => {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Fetch all contact info
+  // Fetch all contact info
   const fetchInfo = async () => {
     try {
       setLoading(true);
@@ -30,17 +30,17 @@ const ContactInfo = () => {
     fetchInfo();
   }, []);
 
-  // ✅ Handle input change
+  // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Handle file change
+  // Handle file change
   const handleFileChange = (e) => {
     setResume(e.target.files[0]);
   };
 
-  // ✅ Submit (Add or Update)
+  // Submit (Add or Update)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -68,18 +68,16 @@ const ContactInfo = () => {
         toast.success("Contact info added");
       }
 
-      // reset
       setFormData({ email: "", phone: "", location: "" });
       setResume(null);
       setEditingId(null);
       fetchInfo();
     } catch (error) {
-      console.error("Save error:", error);
-      toast.error(error.response?.data?.message || "Failed to save info");
+      toast.error("Failed to save info");
     }
   };
 
-  // ✅ Edit
+  // Edit
   const handleEdit = (item) => {
     setFormData({
       email: item.email,
@@ -87,10 +85,9 @@ const ContactInfo = () => {
       location: item.location,
     });
     setEditingId(item._id);
-    setResume(null); // reset file (अगर नया upload करना है तो ही चुनें)
   };
 
-  // ✅ Delete
+  // Delete
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this record?")) return;
     try {
@@ -98,8 +95,7 @@ const ContactInfo = () => {
       toast.success("Deleted successfully");
       fetchInfo();
     } catch (error) {
-      console.error("Delete error:", error);
-      toast.error(error.response?.data?.message || "Failed to delete");
+      toast.error("Failed to delete");
     }
   };
 
@@ -109,7 +105,6 @@ const ContactInfo = () => {
       <form
         onSubmit={handleSubmit}
         className="p-4 bg-white shadow rounded mb-6 flex flex-col gap-3"
-        encType="multipart/form-data"
       >
         <h2 className="text-xl font-semibold">
           {editingId ? "Edit Contact Info" : "Add Contact Info"}
@@ -147,7 +142,6 @@ const ContactInfo = () => {
           name="resume"
           className="border p-2 w-full rounded"
           onChange={handleFileChange}
-          accept=".pdf,.doc,.docx"
         />
 
         <button
@@ -190,7 +184,7 @@ const ContactInfo = () => {
                   <td className="border p-2">{item.phone}</td>
                   <td className="border p-2">{item.location}</td>
                   <td className="border p-2">
-                    {item.resume ? (
+                    {item.resume && (
                       <a
                         href={item.resume}
                         target="_blank"
@@ -199,8 +193,6 @@ const ContactInfo = () => {
                       >
                         Download
                       </a>
-                    ) : (
-                      <span className="text-gray-400">No file</span>
                     )}
                   </td>
                   <td className="border p-2 space-x-2">
