@@ -186,7 +186,7 @@ const ContactInfo = () => {
                   <td className="border p-2">
                     {item.resume && (
                       <a
-                        href={item.resume}
+                        href={item.resume.url}
                         target="_blank"
                         rel="noreferrer"
                         className="text-blue-600 underline"
