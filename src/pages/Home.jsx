@@ -208,7 +208,7 @@ const Home = () => {
   };
   useEffect(() => {
     if (status) {
-      const timer = setTimeout(() => setStatus(""), 4000);
+      const timer = setTimeout(() => setStatus(""), 1000);
       return () => clearTimeout(timer);
     }
   }, [status]);
@@ -651,26 +651,25 @@ const Home = () => {
               />
 
               <select
-  name="rating"
-  value={formData.rating}
-  onChange={handleChange}
-  className="bg-white border rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-600"
-  required
->
-  <option value="">Select Rating</option>
-  {[
-    { value: 1, label: "1 – Poor" },
-    { value: 2, label: "2 – Fair" },
-    { value: 3, label: "3 – Good" },
-    { value: 4, label: "4 – Very Good" },
-    { value: 5, label: "5 – Excellent" },
-  ].map((option) => (
-    <option key={option.value} value={option.value}>
-      {option.label}
-    </option>
-  ))}
-</select>
-
+                name="rating"
+                value={formData.rating}
+                onChange={handleChange}
+                className="bg-white border rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-600"
+                required
+              >
+                <option value="">Select Rating</option>
+                {[
+                  { value: 1, label: "1 – Poor" },
+                  { value: 2, label: "2 – Fair" },
+                  { value: 3, label: "3 – Good" },
+                  { value: 4, label: "4 – Very Good" },
+                  { value: 5, label: "5 – Excellent" },
+                ].map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
 
               <button
                 type="submit"
